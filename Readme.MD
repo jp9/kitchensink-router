@@ -9,25 +9,25 @@ This is a sample implementation of router (technically man-in-the-middle) that d
 - Plugs in a simple AI module to predict the output of APIs ( very limited and works only for numerical output only)
 
 ## Problem:
-    How do I verify that the new improved api is replacing all the features of the old apis ?
+How do I verify that the new improved api is replacing all the features of the old apis ?
 
 ## Answer:
-    - Assuming the old api is still in use, we run the new api in parallel and compare the output of old and new APIs.
+- Assuming the old api is still in use, we run the new api in parallel and compare the output of old and new APIs.
 
 ## How ?:
-    - Take the external request and send the same request to old system and new one. 
-    - Send only old system output to external request
-    - Internally compare the new system output to old system
-        - Store the results and analyze
-        - Use the old output and new output to auto train the AI
+- Take the external request and send the same request to old system and new one. 
+- Send only old system output to external request
+- Internally compare the new system output to old system
+    - Store the results and analyze
+    - Use the old output and new output to auto train the AI
 
 ## Implementation notes:
-    - Solution 1: the router was implemented as a simple HTTP proxy
-    - Solution 2: the router uses Kafka send and retrieve api output
-    - Tangential question/solution: Can an AI model replace the coded APIs with enough data?
+- Solution 1: the router was implemented as a simple HTTP proxy
+- Solution 2: the router uses Kafka send and retrieve api output
+- Tangential question/solution: Can an AI model replace the coded APIs with enough data?
 
 ## Implementation details:
-    - See the readme file in "docker-setup" and sample API server implementations in that directory.
+- See the readme file in "docker-setup" and sample API server implementations in that directory.
 
 
 
