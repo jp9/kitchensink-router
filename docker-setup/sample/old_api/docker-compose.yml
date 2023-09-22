@@ -1,0 +1,36 @@
+version: '3'
+services:
+
+  # Kafka server, needed only if we use kafka to process the API requests
+  kafka:
+    # https://hub.docker.com/r/bitnami/kafka/#!
+    image: docker.io/bitnami/kafka:3.5
+    ports:
+      - "9092:9092"
+      - "2181:2181"
+    volumes:
+      - "../local-kafka-data:/bitnami"
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+
+  internal_old_api_server:
+    # This is the server that handles all external calls
+    image: python:3.10.12-alpine3.18
+    depends_on:
+      - kafka
+    environment:
+      PYTHONUNBUFFERED: 0
+    ports:
+      - ${OLD_API_SERVER_PORT}:${OLD_API_SERVER_PORT}
+    volumes:
+      - .:/app
+    command: >
+      sh -c "cd /app && env && pip install -r requirements.txt && sleep 10 && python -m flask --app src/main run --host=0.0.0.0 --port=${OLD_API_SERVER_PORT} "
+
+volumes:
+  kafka_data:
+    driver: local
+    
