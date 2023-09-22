@@ -1,13 +1,12 @@
 # Kitchen sink router: Run all upgraded/newer APIs in shadow mode and gather metrics (to build auto AI)
 
-Disclaimer: This is a just a simple sample and NOT meant for production. I wrote this as 
+Disclaimer: This is a just a simple sample and NOT meant for production. I wrote this as a simple demonstration.
 
 ## Introduction:
-    This is a sample implementation of router (technically man-in-the-middle) that does multiple things:
-
-    - Allow newer version of APIs to run in shadow mode (and gather metrics comparing output to the old version of the API)
-    - Allow the router to use either HTTP or Kafka messaging to communicate with the backend servers.
-    - Plugs in a simple AI module to predict the output of APIs ( very limited and works only for numerical output only)
+This is a sample implementation of router (technically man-in-the-middle) that does multiple things:
+- Allow newer version of APIs to run in shadow mode (and gather metrics comparing output to the old version of the API)
+- Allow the router to use either HTTP or Kafka messaging to communicate with the backend servers.
+- Plugs in a simple AI module to predict the output of APIs ( very limited and works only for numerical output only)
 
 ## Problem:
     How do I verify that the new improved api is replacing all the features of the old apis ?
