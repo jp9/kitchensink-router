@@ -1,0 +1,7 @@
+flask
+#kafka-python - Not used 
+pandas
+numpy
+#pycaret - Not used
+scikit-learn
+

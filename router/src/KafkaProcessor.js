@@ -95,9 +95,8 @@ export class KafkaProcessor {
                         const finalOutput = {
                             ...KAFKA_RESPONSE_STACK[key]["old_output"],
                         };
-                        finalOutput["ignored"] = {
-                            newer_api: KAFKA_RESPONSE_STACK[key]["new_output"],
-                        };
+                        
+                        finalOutput["__newer_api"] = KAFKA_RESPONSE_STACK[key]["new_output"];
                         resolve(finalOutput);
                         comparator(
                             KAFKA_RESPONSE_STACK[key]["old_output"],

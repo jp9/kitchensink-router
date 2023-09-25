@@ -37,7 +37,7 @@ services:
   # Old API service
   internal_old_micro_service:
     # This is the server that handles all external calls
-    image: python:3.10.12-alpine3.18
+    image: python:3.11-alpine3.18
     depends_on:
       - kafka
     environment:
@@ -50,6 +50,21 @@ services:
     command: >
       sh -c "cd /app && env && echo INSTALLING REQUIREMENTS && cat requirements.txt &&  pip install -r requirements.txt && sleep 10 && python -m flask --app src/main run --host=0.0.0.0 --port=${OLD_API_SERVER_PORT} "
 
+
+# Auto AI service
+  internal_ai_service:
+    # This is the server that handles all AI data and predictions
+    image: mcr.microsoft.com/azureml/sklearn-0.24.1-ubuntu18.04-py37-cpu-inference:latest
+    environment:
+      PYTHONUNBUFFERED: 0
+      SERVER_PORT: ${AUTO_AI_API_SERVER_PORT}
+    ports:
+      - ${AUTO_AI_API_SERVER_PORT}:${AUTO_AI_API_SERVER_PORT}
+    volumes:
+      - ../auto_ai:/app
+    command: >
+      sh -c "cd /app && env && echo INSTALLING REQUIREMENTS && cat requirements.txt &&  pip install -r requirements.txt && sleep 1 && python -m flask --app src/main run --host=0.0.0.0 --port=${AUTO_AI_API_SERVER_PORT} "
+
   # The router
   router:
     # This is the server that handles all external requests
@@ -60,6 +75,7 @@ services:
       SERVER_PORT: ${ROUTER_SERVER_PORT}
       OLD_API_SERVER_URL: http://internal_old_micro_service:${OLD_API_SERVER_PORT}
       NEW_API_SERVER_URL: http://internal_new_micro_service:${NEW_API_SERVER_PORT}
+      AUTO_AI_SERVER_URL: http://internal_ai_service:${AUTO_AI_API_SERVER_PORT}
     ports:
       - ${ROUTER_SERVER_PORT}:${ROUTER_SERVER_PORT}
       - 9229:9229

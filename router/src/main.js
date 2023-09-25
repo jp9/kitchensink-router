@@ -12,6 +12,7 @@
 import express from "express";
 import { KafkaProcessor } from "./KafkaProcessor.js";
 import { ProxyProcessor } from "./HttpProcessor.js";
+import {SimpleAutoAI} from "./SimpleAutoAI.js"
 import log4js from "log4js";
 
 const port = process.env.SERVER_PORT || 8080;
@@ -37,6 +38,7 @@ logger.debug("Starting the router");
 logger.debug(process.env);
 const kafkaProcessor = new KafkaProcessor(log4js.getLogger("app"));
 const httpProcessor = new ProxyProcessor(log4js.getLogger("app"));
+const simpleAutoAI = new SimpleAutoAI(log4js.getLogger("app"))
 
 /**
  * Standard heartbeat 
@@ -53,14 +55,19 @@ app.get("/api/health", async (req, res) => {
 app.get("/api/cos/:rad", async (req, res) => {
     const usekafka = req.query.kafka === "true";
     const processor = usekafka ? kafkaProcessor : httpProcessor;
-    const result = await processor.process(
+    const result = await Promise.all([processor.process(
         usekafka ? req.params.rad : req.path,
         function (...values) {
             logger.trace("In comparator");
             logger.trace(values);
+            simpleAutoAI.collect("/api/cos", values[0].input, values[0].output);
         }
-    );
-    res.json(result);
+    ), simpleAutoAI.predict("/api/cos", req.params.rad)]);
+    const output = structuredClone(result[0]);
+    if (result[1] && (result[1].output !== null || result[1].output !== undefined)) {
+        output['__ai_predicted'] = result[1]; 
+    }
+    res.json(output);
 });
 
 /**

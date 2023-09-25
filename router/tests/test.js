@@ -34,7 +34,7 @@ test("Test output for the cosine api using http processor", async (t) => {
       "API didn't parse the input correctly: " + input + " : " + data.input
     );
     const oldOutput = data.output;
-    const newOutput = data.ignored.newer_api.output;
+    const newOutput = data.__newer_api.output;
     assert.ok(
       Math.abs(oldOutput - newOutput) < 0.01,
       "Equalilty failed for input : " +
@@ -67,7 +67,7 @@ test("Test output for the cosine api using kafka processor", async (t) => {
       "API didn't parse the input correctly: " + input + " : " + data.input
     );
     const oldOutput = data.output;
-    const newOutput = data.ignored.newer_api.output;
+    const newOutput = data.__newer_api.output;
     assert.ok(
       Math.abs(oldOutput - newOutput) < 0.01,
       "Equalilty failed for input : " +
