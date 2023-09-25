@@ -29,6 +29,39 @@ How do I verify that the new improved api is replacing all the features of the o
 ## Implementation details:
 - See the readme file in "docker-setup" and sample API server implementations in that directory.
 
+## How do I test it ?
+- Start the docker in one terminal
 
+    cd docker-setup
+    sh start.sh
 
-        
+- Warm up the AI in another terminal
+
+    python3 auto_ai/test.py 
+
+- Make an api call see results
+
+    curl localhost:8080/api/cos/0.5
+
+    Sample output:
+``
+    {
+        "api_version": 1,
+        "input": 0.5,
+        "output": 0.8775825618903728,
+        "status": "ok",
+        "__newer_api": {
+            "status": "ok",
+            "api_version": 2,
+            "input": 0.5,
+            "output": 0.8775825618903728,
+            "process_date": "2023-09-25T16:24:52.310Z"
+        },
+        "__ai_predicted": {
+            "api_version": "0.1.0",
+            "input": "0.5",
+            "output": 0.8775787696230275,
+            "status": "ok"
+        }
+    }
+``
