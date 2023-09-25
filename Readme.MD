@@ -31,20 +31,24 @@ How do I verify that the new improved api is replacing all the features of the o
 
 ## How do I test it ?
 - Start the docker in one terminal
-
+    ```
     cd docker-setup
     sh start.sh
+    ```
 
 - Warm up the AI in another terminal
-
+    ```
     python3 auto_ai/test.py 
+    ```
 
 - Make an api call see results
-
+    ```
     curl localhost:8080/api/cos/0.5
+    ```
 
     Sample output:
-``
+
+```
     {
         "api_version": 1,
         "input": 0.5,
@@ -64,4 +68,4 @@ How do I verify that the new improved api is replacing all the features of the o
             "status": "ok"
         }
     }
-``
+```
